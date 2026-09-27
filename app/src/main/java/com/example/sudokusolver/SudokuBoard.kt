@@ -13,11 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -26,26 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 
 @Composable
-fun SudokuBoard(modifier: Modifier = Modifier) {
-    val board: IntArray = intArrayOf(
-        5, 3, 0, 0, 7, 0, 0, 0, 0,
-        6, 0, 0, 1, 9, 5, 0, 0, 0,
-        0, 9, 8, 0, 0, 0, 0, 6, 0,
-        8, 0, 0, 0, 6, 0, 0, 0, 3,
-        4, 0, 0, 8, 0, 3, 0, 0, 1,
-        7, 0, 0, 0, 2, 0, 0, 0, 6,
-        0, 6, 0, 0, 0, 0, 2, 8, 0,
-        0, 0, 0, 4, 1, 9, 0, 0, 5,
-        0, 0, 0, 0, 8, 0, 0, 7, 9
-    )
-    var selectedCell by remember {
-        mutableStateOf<Int?>(null)
-    }
-
-    LaunchedEffect(selectedCell) {
-        Log.d("SudokuBoard", "Selected cell changed: index=$selectedCell")
-    }
-
+fun SudokuBoard(
+    board: IntArray,
+    selectedCell: Int?,
+    onCellSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val lineColor = MaterialTheme.colorScheme.onSurface
 
     Box(
@@ -67,7 +48,7 @@ fun SudokuBoard(modifier: Modifier = Modifier) {
                                     "SudokuBoard",
                                     "Cell clicked: index=$index, row=$row, column=$column, value=${board[index]}"
                                 )
-                                selectedCell = index
+                                onCellSelected(index)
                             },
                             modifier = Modifier
                                 .weight(1f)
@@ -141,6 +122,10 @@ fun SudokuCell(
 @Composable
 fun SudokuBoardPreview() {
     SudokuSolverTheme {
-        SudokuBoard()
+        SudokuBoard(
+            board = IntArray(81),
+            selectedCell = 0,
+            onCellSelected = {}
+        )
     }
 }
