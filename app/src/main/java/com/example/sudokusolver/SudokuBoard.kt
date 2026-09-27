@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
@@ -23,6 +24,7 @@ import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 @Composable
 fun SudokuBoard(
     board: IntArray,
+    originalBoard: IntArray,
     selectedCell: Int?,
     conflicts: Set<Int>,
     onCellSelected: (Int) -> Unit,
@@ -43,6 +45,7 @@ fun SudokuBoard(
                         val index = row * 9 + column
                         SudokuCell(
                             value = board[index],
+                            isOriginal = originalBoard[index] != 0,
                             isSelected = selectedCell == index,
                             isConflicting = index in conflicts,
                             onClick = {
@@ -91,6 +94,7 @@ fun SudokuBoard(
 @Composable
 fun SudokuCell(
     value: Int,
+    isOriginal: Boolean,
     isSelected: Boolean,
     isConflicting: Boolean,
     onClick: () -> Unit,
@@ -104,7 +108,8 @@ fun SudokuCell(
     val textColor = when {
         isConflicting -> MaterialTheme.colorScheme.onErrorContainer
         isSelected -> MaterialTheme.colorScheme.onPrimaryContainer
-        else -> MaterialTheme.colorScheme.onSurface
+        isOriginal -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.primary
     }
 
     Box(
@@ -116,6 +121,7 @@ fun SudokuCell(
         Text(
             text = if (value == 0) "" else value.toString(),
             color = textColor,
+            fontWeight = if (isOriginal) FontWeight.Bold else FontWeight.Normal,
             style = MaterialTheme.typography.titleLarge
         )
     }
@@ -127,10 +133,13 @@ fun SudokuBoardPreview() {
     val board = IntArray(81)
     board[0] = 5
     board[8] = 5
+    val originalBoard = board.copyOf()
+    board[4] = 7
 
     SudokuSolverTheme {
         SudokuBoard(
             board = board,
+            originalBoard = originalBoard,
             selectedCell = 0,
             conflicts = setOf(0, 8),
             onCellSelected = {}

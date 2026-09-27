@@ -3,7 +3,10 @@ package com.example.sudokusolver
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sudokusolver.domain.SudokuSolver
 import com.example.sudokusolver.domain.SudokuValidator
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 
@@ -32,6 +36,9 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
                 0, 0, 0, 0, 8, 0, 0, 7, 9
             )
         )
+    }
+    var originalBoard by remember {
+        mutableStateOf(board.copyOf())
     }
     var selectedCell by remember {
         mutableStateOf<Int?>(null)
@@ -58,6 +65,7 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
         SudokuTitle()
         SudokuBoard(
             board = board,
+            originalBoard = originalBoard,
             selectedCell = selectedCell,
             conflicts = conflicts,
             onCellSelected = { index -> selectedCell = index }
@@ -72,6 +80,9 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
                     val newBoard = board.copyOf()
                     newBoard[index] = number
                     board = newBoard
+                    val newOriginalBoard = originalBoard.copyOf()
+                    newOriginalBoard[index] = number
+                    originalBoard = newOriginalBoard
                     Log.d(
                         "SudokuScreen",
                         "Cell value changed: index=$index, from=$previousValue, to=$number"
@@ -87,10 +98,33 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
                     val newBoard = board.copyOf()
                     newBoard[index] = 0
                     board = newBoard
+                    val newOriginalBoard = originalBoard.copyOf()
+                    newOriginalBoard[index] = 0
+                    originalBoard = newOriginalBoard
                     Log.d("SudokuScreen", "Cell cleared: index=$index, previousValue=$previousValue")
                 }
             }
         )
+        Button(
+            onClick = {
+                if (conflicts.isNotEmpty()) {
+                    Log.w("SudokuScreen", "Solve rejected: conflicts=${conflicts.sorted()}")
+                } else {
+                    val workingBoard = board.copyOf()
+                    val clueCount = originalBoard.count { value -> value != 0 }
+                    Log.i("SudokuScreen", "Starting Sudoku solver: clues=$clueCount")
+                    if (SudokuSolver.solve(workingBoard)) {
+                        board = workingBoard
+                        Log.i("SudokuScreen", "Sudoku solved successfully")
+                    } else {
+                        Log.w("SudokuScreen", "Sudoku has no solution")
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Solve")
+        }
     }
 }
 
