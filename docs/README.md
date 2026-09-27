@@ -16,6 +16,7 @@ new tutorials and links are added as the course progresses.
 | [03](steps/03-cell-selection.md) | Cell selection | State, remember, mutableStateOf, recomposition, callbacks | `step-03: add sudoku cell selection` |
 | [03A](steps/03a-logging.md) | Logging and lifecycle troubleshooting | Logcat, log levels, LaunchedEffect, Activity lifecycle | `step-03a: add logging and lifecycle diagnostics` |
 | [04](steps/04-editable-board.md) | Editable board and number pad | State hoisting, callbacks, unidirectional data flow, copied-array updates | `step-04: add editable board and number pad` |
+| [05A](steps/05a-row-validation.md) | Row validation | Pure Kotlin logic, sets, pair comparison, local JVM unit tests | `step-05a: add row validation with unit tests` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses
