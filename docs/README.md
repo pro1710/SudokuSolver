@@ -13,6 +13,7 @@ new tutorials and links are added as the course progresses.
 |---|---|---|---|
 | [01](steps/01-compose-project.md) | Compose project | ComponentActivity, setContent, Composable, Modifier, Scaffold | `step-01: simplify compose project` |
 | [02](steps/02-static-sudoku-board.md) | Static Sudoku board | IntArray, row/column indexing, Row, Column, Box, weight, Canvas | `step-02: add static sudoku board` |
+| [03](steps/03-cell-selection.md) | Cell selection | State, remember, mutableStateOf, recomposition, callbacks | `step-03: add sudoku cell selection` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses
