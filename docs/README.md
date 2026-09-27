@@ -21,6 +21,7 @@ new tutorials and links are added as the course progresses.
 | [05C](steps/05c-conflict-ui.md) | Conflict highlighting | Derived values, remember keys, Material error colors, validation logging | `step-05c: highlight sudoku conflicts in ui` |
 | [06A](steps/06a-sudoku-solver.md) | Sudoku solver | Recursion, candidate checks, backtracking, mutable working array, JVM tests | `step-06a: implement sudoku backtracking solver` |
 | [06B](steps/06b-solver-ui.md) | Solver UI integration | Working copies, clue tracking, conditional actions, text styling | `step-06b: integrate solver with compose ui` |
+| [06C](steps/06c-edit-solution-mode.md) | Edit and Solution modes | Enum, state transitions, conditional UI, reset, rememberSaveable | `step-06c: add edit and solution modes` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses

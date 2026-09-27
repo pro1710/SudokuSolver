@@ -27,6 +27,7 @@ fun SudokuBoard(
     originalBoard: IntArray,
     selectedCell: Int?,
     conflicts: Set<Int>,
+    isEditable: Boolean,
     onCellSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,6 +49,7 @@ fun SudokuBoard(
                             isOriginal = originalBoard[index] != 0,
                             isSelected = selectedCell == index,
                             isConflicting = index in conflicts,
+                            isEditable = isEditable,
                             onClick = {
                                 Log.d(
                                     "SudokuBoard",
@@ -97,6 +99,7 @@ fun SudokuCell(
     isOriginal: Boolean,
     isSelected: Boolean,
     isConflicting: Boolean,
+    isEditable: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -115,7 +118,7 @@ fun SudokuCell(
     Box(
         modifier = modifier
             .background(backgroundColor)
-            .clickable(onClick = onClick),
+            .clickable(enabled = isEditable, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -142,6 +145,7 @@ fun SudokuBoardPreview() {
             originalBoard = originalBoard,
             selectedCell = 0,
             conflicts = setOf(0, 8),
+            isEditable = true,
             onCellSelected = {}
         )
     }
