@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SudokuSolverTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    SudokuTitle(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,17 +30,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+fun SudokuTitle(modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "Sudoku Solver",
         modifier = modifier
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun SudokuTitlePreview() {
     SudokuSolverTheme {
-        Greeting("Android")
+        SudokuTitle()
     }
 }
