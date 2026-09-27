@@ -19,12 +19,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sudokusolver.domain.SudokuBoard
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 
 @Composable
-fun SudokuBoard(
-    board: IntArray,
-    originalBoard: IntArray,
+fun SudokuGrid(
+    board: SudokuBoard,
+    originalBoard: SudokuBoard,
     selectedCell: Int?,
     conflicts: Set<Int>,
     isEditable: Boolean,
@@ -52,7 +53,7 @@ fun SudokuBoard(
                             isEditable = isEditable,
                             onClick = {
                                 Log.d(
-                                    "SudokuBoard",
+                                    "SudokuGrid",
                                     "Cell clicked: index=$index, row=$row, column=$column, value=${board[index]}"
                                 )
                                 onCellSelected(index)
@@ -132,15 +133,12 @@ fun SudokuCell(
 
 @Preview(showBackground = true)
 @Composable
-fun SudokuBoardPreview() {
-    val board = IntArray(81)
-    board[0] = 5
-    board[8] = 5
-    val originalBoard = board.copyOf()
-    board[4] = 7
+fun SudokuGridPreview() {
+    val originalBoard = SudokuBoard().withValue(0, 5).withValue(8, 5)
+    val board = originalBoard.withValue(4, 7)
 
     SudokuSolverTheme {
-        SudokuBoard(
+        SudokuGrid(
             board = board,
             originalBoard = originalBoard,
             selectedCell = 0,

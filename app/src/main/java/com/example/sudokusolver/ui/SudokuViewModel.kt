@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.sudokusolver.domain.SudokuBoard
 import com.example.sudokusolver.domain.SudokuSolver
 import com.example.sudokusolver.domain.SudokuValidator
 
@@ -43,10 +44,8 @@ class SudokuViewModel : ViewModel() {
         }
 
         val previousValue = uiState.board[index]
-        val newBoard = uiState.board.copyOf()
-        newBoard[index] = number
-        val newOriginalBoard = uiState.originalBoard.copyOf()
-        newOriginalBoard[index] = number
+        val newBoard = uiState.board.withValue(index, number)
+        val newOriginalBoard = uiState.originalBoard.withValue(index, number)
         uiState = uiState.copy(
             board = newBoard,
             originalBoard = newOriginalBoard,
@@ -69,14 +68,14 @@ class SudokuViewModel : ViewModel() {
             return
         }
 
-        val workingBoard = uiState.board.copyOf()
-        val clueCount = uiState.originalBoard.count { value -> value != 0 }
+        val clueCount = uiState.originalBoard.clueCount
         Log.i("SudokuViewModel", "Starting Sudoku solver: clues=$clueCount")
-        if (SudokuSolver.solve(workingBoard)) {
+        val solvedBoard = SudokuSolver.solve(uiState.board)
+        if (solvedBoard != null) {
             uiState = uiState.copy(
-                board = workingBoard,
+                board = solvedBoard,
                 selectedCell = null,
-                conflicts = findConflicts(workingBoard),
+                conflicts = findConflicts(solvedBoard),
                 mode = SudokuMode.SOLUTION
             )
             Log.i("SudokuViewModel", "Mode changed: EDIT -> SOLUTION")
@@ -88,7 +87,7 @@ class SudokuViewModel : ViewModel() {
 
     fun editClues() {
         if (uiState.mode != SudokuMode.SOLUTION) return
-        val clueBoard = uiState.originalBoard.copyOf()
+        val clueBoard = uiState.originalBoard
         uiState = uiState.copy(
             board = clueBoard,
             selectedCell = null,
@@ -107,7 +106,7 @@ class SudokuViewModel : ViewModel() {
         Log.i("SudokuViewModel", "Board reset to built-in puzzle")
     }
 
-    private fun findConflicts(board: IntArray): Set<Int> {
+    private fun findConflicts(board: SudokuBoard): Set<Int> {
         val conflicts = SudokuValidator.findConflicts(board)
         Log.d("SudokuViewModel", "Validation completed: conflicts=${conflicts.sorted()}")
         if (conflicts.isNotEmpty()) {

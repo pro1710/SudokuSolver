@@ -1,67 +1,78 @@
 package com.example.sudokusolver.domain
 
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SudokuSolverTest {
     @Test
     fun `known puzzle is solved with the expected values`() {
-        val board = examplePuzzle()
+        val board = SudokuBoard(examplePuzzle())
 
         val solved = SudokuSolver.solve(board)
 
-        assertTrue(solved)
-        assertArrayEquals(expectedSolution(), board)
+        assertNotNull(solved)
+        assertArrayEquals(expectedSolution(), solved?.toIntArray())
+    }
+
+    @Test
+    fun `successful solving does not modify the input board`() {
+        val board = SudokuBoard(examplePuzzle())
+        val originalValues = board.toIntArray()
+
+        val solved = SudokuSolver.solve(board)
+
+        assertNotNull(solved)
+        assertArrayEquals(originalValues, board.toIntArray())
+        assertArrayEquals(expectedSolution(), solved?.toIntArray())
     }
 
     @Test
     fun `already solved board is accepted unchanged`() {
-        val board = expectedSolution()
-        val originalBoard = board.copyOf()
+        val board = SudokuBoard(expectedSolution())
+        val originalValues = board.toIntArray()
 
         val solved = SudokuSolver.solve(board)
 
-        assertTrue(solved)
-        assertArrayEquals(originalBoard, board)
+        assertNotNull(solved)
+        assertArrayEquals(originalValues, solved?.toIntArray())
+        assertArrayEquals(originalValues, board.toIntArray())
     }
 
     @Test
     fun `conflicting clues are rejected without changing the board`() {
-        val board = examplePuzzle()
-        board[2] = 5
-        val originalBoard = board.copyOf()
+        val board = SudokuBoard(examplePuzzle()).withValue(2, 5)
+        val originalValues = board.toIntArray()
 
         val solved = SudokuSolver.solve(board)
 
-        assertFalse(solved)
-        assertArrayEquals(originalBoard, board)
+        assertNull(solved)
+        assertArrayEquals(originalValues, board.toIntArray())
     }
 
     @Test
-    fun `unsolvable board restores all attempted values`() {
-        val board = examplePuzzle()
-        board[2] = 1
-        val originalBoard = board.copyOf()
+    fun `unsolvable board returns null without changing the input`() {
+        val board = SudokuBoard(examplePuzzle()).withValue(2, 1)
+        val originalValues = board.toIntArray()
         assertTrue(SudokuValidator.findConflicts(board).isEmpty())
 
         val solved = SudokuSolver.solve(board)
 
-        assertFalse(solved)
-        assertArrayEquals(originalBoard, board)
+        assertNull(solved)
+        assertArrayEquals(originalValues, board.toIntArray())
     }
 
     @Test
     fun `completed board with conflicts is rejected`() {
-        val board = expectedSolution()
-        board[0] = 3
-        val originalBoard = board.copyOf()
+        val board = SudokuBoard(expectedSolution()).withValue(0, 3)
+        val originalValues = board.toIntArray()
 
         val solved = SudokuSolver.solve(board)
 
-        assertFalse(solved)
-        assertArrayEquals(originalBoard, board)
+        assertNull(solved)
+        assertArrayEquals(originalValues, board.toIntArray())
     }
 
     private fun examplePuzzle(): IntArray = intArrayOf(

@@ -1,9 +1,10 @@
 package com.example.sudokusolver.domain
 
 object SudokuSolver {
-    fun solve(board: IntArray): Boolean {
-        if (SudokuValidator.findConflicts(board).isNotEmpty()) return false
-        return solveNextCell(board)
+    fun solve(board: SudokuBoard): SudokuBoard? {
+        if (SudokuValidator.findConflicts(board).isNotEmpty()) return null
+        val workingBoard = board.toIntArray()
+        return if (solveNextCell(workingBoard)) SudokuBoard(workingBoard) else null
     }
 
     private fun solveNextCell(board: IntArray): Boolean {

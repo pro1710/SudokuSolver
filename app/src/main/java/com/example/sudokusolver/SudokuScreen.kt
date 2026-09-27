@@ -50,7 +50,7 @@ fun SudokuScreenContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SudokuTitle()
-        SudokuBoard(
+        SudokuGrid(
             board = uiState.board,
             originalBoard = uiState.originalBoard,
             selectedCell = uiState.selectedCell,

@@ -1,7 +1,7 @@
 package com.example.sudokusolver.domain
 
 object SudokuValidator {
-    fun findConflicts(board: IntArray): Set<Int> {
+    fun findConflicts(board: SudokuBoard): Set<Int> {
         val conflicts = mutableSetOf<Int>()
 
         for (row in 0 until 9) {
@@ -31,7 +31,7 @@ object SudokuValidator {
         return conflicts
     }
 
-    private fun findConflictsInGroup(board: IntArray, indices: List<Int>): Set<Int> {
+    private fun findConflictsInGroup(board: SudokuBoard, indices: List<Int>): Set<Int> {
         val conflicts = mutableSetOf<Int>()
 
         for (position in indices.indices) {
