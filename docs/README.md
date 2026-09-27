@@ -19,6 +19,7 @@ new tutorials and links are added as the course progresses.
 | [05A](steps/05a-row-validation.md) | Row validation | Pure Kotlin logic, sets, pair comparison, local JVM unit tests | `step-05a: add row validation with unit tests` |
 | [05B](steps/05b-full-validation.md) | Full Sudoku validation | Shared helper, row/column/box indices, set union, regression tests | `step-05b: validate rows columns and boxes` |
 | [05C](steps/05c-conflict-ui.md) | Conflict highlighting | Derived values, remember keys, Material error colors, validation logging | `step-05c: highlight sudoku conflicts in ui` |
+| [06A](steps/06a-sudoku-solver.md) | Sudoku solver | Recursion, candidate checks, backtracking, mutable working array, JVM tests | `step-06a: implement sudoku backtracking solver` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses
