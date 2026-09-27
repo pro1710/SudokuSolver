@@ -1,4 +1,4 @@
-package com.example.sudokusolver
+package com.example.sudokusolver.ui
 
 import android.util.Log
 import androidx.compose.foundation.Canvas

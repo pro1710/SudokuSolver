@@ -1,6 +1,5 @@
 package com.example.sudokusolver.ui
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,19 +7,23 @@ import androidx.lifecycle.ViewModel
 import com.example.sudokusolver.domain.SudokuBoard
 import com.example.sudokusolver.domain.SudokuSolver
 import com.example.sudokusolver.domain.SudokuValidator
+import com.example.sudokusolver.util.AndroidAppLogger
+import com.example.sudokusolver.util.AppLogger
 
-class SudokuViewModel : ViewModel() {
+class SudokuViewModel(
+    private val logger: AppLogger = AndroidAppLogger
+) : ViewModel() {
     var uiState by mutableStateOf(SudokuUiState())
         private set
 
     init {
-        Log.d("SudokuViewModel", "ViewModel created")
+        logger.debug("SudokuViewModel", "ViewModel created")
     }
 
     fun selectCell(index: Int) {
         if (uiState.mode != SudokuMode.EDIT) return
         uiState = uiState.copy(selectedCell = index)
-        Log.d("SudokuViewModel", "Selected cell changed: index=$index")
+        logger.debug("SudokuViewModel", "Selected cell changed: index=$index")
     }
 
     fun enterNumber(number: Int) {
@@ -36,9 +39,9 @@ class SudokuViewModel : ViewModel() {
         val index = uiState.selectedCell
         if (index == null) {
             if (number == 0) {
-                Log.w("SudokuViewModel", "Clear ignored: no cell selected")
+                logger.warning("SudokuViewModel", "Clear ignored: no cell selected")
             } else {
-                Log.w("SudokuViewModel", "Number ignored: number=$number, no cell selected")
+                logger.warning("SudokuViewModel", "Number ignored: number=$number, no cell selected")
             }
             return
         }
@@ -52,9 +55,9 @@ class SudokuViewModel : ViewModel() {
             conflicts = findConflicts(newBoard)
         )
         if (number == 0) {
-            Log.d("SudokuViewModel", "Cell cleared: index=$index, previousValue=$previousValue")
+            logger.debug("SudokuViewModel", "Cell cleared: index=$index, previousValue=$previousValue")
         } else {
-            Log.d(
+            logger.debug(
                 "SudokuViewModel",
                 "Cell value changed: index=$index, from=$previousValue, to=$number"
             )
@@ -64,12 +67,12 @@ class SudokuViewModel : ViewModel() {
     fun solve() {
         if (uiState.mode != SudokuMode.EDIT) return
         if (uiState.conflicts.isNotEmpty()) {
-            Log.w("SudokuViewModel", "Solve rejected: conflicts=${uiState.conflicts.sorted()}")
+            logger.warning("SudokuViewModel", "Solve rejected: conflicts=${uiState.conflicts.sorted()}")
             return
         }
 
         val clueCount = uiState.originalBoard.clueCount
-        Log.i("SudokuViewModel", "Starting Sudoku solver: clues=$clueCount")
+        logger.info("SudokuViewModel", "Starting Sudoku solver: clues=$clueCount")
         val solvedBoard = SudokuSolver.solve(uiState.board)
         if (solvedBoard != null) {
             uiState = uiState.copy(
@@ -78,10 +81,10 @@ class SudokuViewModel : ViewModel() {
                 conflicts = findConflicts(solvedBoard),
                 mode = SudokuMode.SOLUTION
             )
-            Log.i("SudokuViewModel", "Mode changed: EDIT -> SOLUTION")
-            Log.i("SudokuViewModel", "Sudoku solved successfully")
+            logger.info("SudokuViewModel", "Mode changed: EDIT -> SOLUTION")
+            logger.info("SudokuViewModel", "Sudoku solved successfully")
         } else {
-            Log.w("SudokuViewModel", "Sudoku has no solution")
+            logger.warning("SudokuViewModel", "Sudoku has no solution")
         }
     }
 
@@ -94,23 +97,23 @@ class SudokuViewModel : ViewModel() {
             conflicts = findConflicts(clueBoard),
             mode = SudokuMode.EDIT
         )
-        Log.i("SudokuViewModel", "Mode changed: SOLUTION -> EDIT; clues restored")
+        logger.info("SudokuViewModel", "Mode changed: SOLUTION -> EDIT; clues restored")
     }
 
     fun reset() {
         val previousMode = uiState.mode
         uiState = SudokuUiState()
         if (previousMode != SudokuMode.EDIT) {
-            Log.i("SudokuViewModel", "Mode changed: SOLUTION -> EDIT; reset")
+            logger.info("SudokuViewModel", "Mode changed: SOLUTION -> EDIT; reset")
         }
-        Log.i("SudokuViewModel", "Board reset to built-in puzzle")
+        logger.info("SudokuViewModel", "Board reset to built-in puzzle")
     }
 
     private fun findConflicts(board: SudokuBoard): Set<Int> {
         val conflicts = SudokuValidator.findConflicts(board)
-        Log.d("SudokuViewModel", "Validation completed: conflicts=${conflicts.sorted()}")
+        logger.debug("SudokuViewModel", "Validation completed: conflicts=${conflicts.sorted()}")
         if (conflicts.isNotEmpty()) {
-            Log.w("SudokuViewModel", "Board contains ${conflicts.size} conflicting cells")
+            logger.warning("SudokuViewModel", "Board contains ${conflicts.size} conflicting cells")
         }
         return conflicts
     }

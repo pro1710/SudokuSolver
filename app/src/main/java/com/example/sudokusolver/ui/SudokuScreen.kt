@@ -1,4 +1,4 @@
-package com.example.sudokusolver
+package com.example.sudokusolver.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,9 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.sudokusolver.ui.SudokuMode
-import com.example.sudokusolver.ui.SudokuUiState
-import com.example.sudokusolver.ui.SudokuViewModel
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 
 @Composable
@@ -90,6 +87,22 @@ fun SudokuScreenContent(
                 Text("Reset")
             }
         }
+    }
+}
+
+@Composable
+fun SudokuTitle(modifier: Modifier = Modifier) {
+    Text(
+        text = "Sudoku Solver",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun SudokuTitlePreview() {
+    SudokuSolverTheme {
+        SudokuTitle()
     }
 }
 

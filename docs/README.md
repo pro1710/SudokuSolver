@@ -25,6 +25,7 @@ new tutorials and links are added as the course progresses.
 | [07A](steps/07a-viewmodel-refactor.md) | ViewModel refactor | Screen state owner, single source of truth, data class.copy, method references, configuration changes | `step-07a: move sudoku state and actions to viewmodel` |
 | [07B](steps/07b-domain-model.md) | Sudoku domain model | Encapsulation, constructor validation, coordinates, operator get, defensive copying, immutable updates | `step-07b: introduce sudoku domain model` |
 | [07C](steps/07c-domain-api-refactor.md) | Migrate app to domain model | Immutable public APIs, private working arrays, nullable results, model-based UI state | `step-07c: migrate app to sudoku domain model` |
+| [07D](steps/07d-cleanup-and-viewmodel-tests.md) | Package cleanup and ViewModel tests | Interfaces, constructor injection, logging adapter, test doubles, state-transition tests | `step-07d: clean architecture and test viewmodel` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses

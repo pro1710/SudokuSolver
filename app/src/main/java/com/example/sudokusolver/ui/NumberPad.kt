@@ -1,4 +1,4 @@
-package com.example.sudokusolver
+package com.example.sudokusolver.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
