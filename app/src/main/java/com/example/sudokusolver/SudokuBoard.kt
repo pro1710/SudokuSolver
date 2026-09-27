@@ -1,5 +1,6 @@
 package com.example.sudokusolver
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,11 @@ fun SudokuBoard(modifier: Modifier = Modifier) {
     var selectedCell by remember {
         mutableStateOf<Int?>(null)
     }
+
+    LaunchedEffect(selectedCell) {
+        Log.d("SudokuBoard", "Selected cell changed: index=$selectedCell")
+    }
+
     val lineColor = MaterialTheme.colorScheme.onSurface
 
     Box(
@@ -55,7 +62,13 @@ fun SudokuBoard(modifier: Modifier = Modifier) {
                         SudokuCell(
                             value = board[index],
                             isSelected = selectedCell == index,
-                            onClick = { selectedCell = index },
+                            onClick = {
+                                Log.d(
+                                    "SudokuBoard",
+                                    "Cell clicked: index=$index, row=$row, column=$column, value=${board[index]}"
+                                )
+                                selectedCell = index
+                            },
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxSize()
