@@ -24,6 +24,7 @@ import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 fun SudokuBoard(
     board: IntArray,
     selectedCell: Int?,
+    conflicts: Set<Int>,
     onCellSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -43,6 +44,7 @@ fun SudokuBoard(
                         SudokuCell(
                             value = board[index],
                             isSelected = selectedCell == index,
+                            isConflicting = index in conflicts,
                             onClick = {
                                 Log.d(
                                     "SudokuBoard",
@@ -90,18 +92,19 @@ fun SudokuBoard(
 fun SudokuCell(
     value: Int,
     isSelected: Boolean,
+    isConflicting: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (isSelected) {
-        MaterialTheme.colorScheme.primaryContainer
-    } else {
-        MaterialTheme.colorScheme.surface
+    val backgroundColor = when {
+        isConflicting -> MaterialTheme.colorScheme.errorContainer
+        isSelected -> MaterialTheme.colorScheme.primaryContainer
+        else -> MaterialTheme.colorScheme.surface
     }
-    val textColor = if (isSelected) {
-        MaterialTheme.colorScheme.onPrimaryContainer
-    } else {
-        MaterialTheme.colorScheme.onSurface
+    val textColor = when {
+        isConflicting -> MaterialTheme.colorScheme.onErrorContainer
+        isSelected -> MaterialTheme.colorScheme.onPrimaryContainer
+        else -> MaterialTheme.colorScheme.onSurface
     }
 
     Box(
@@ -121,10 +124,15 @@ fun SudokuCell(
 @Preview(showBackground = true)
 @Composable
 fun SudokuBoardPreview() {
+    val board = IntArray(81)
+    board[0] = 5
+    board[8] = 5
+
     SudokuSolverTheme {
         SudokuBoard(
-            board = IntArray(81),
+            board = board,
             selectedCell = 0,
+            conflicts = setOf(0, 8),
             onCellSelected = {}
         )
     }

@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.sudokusolver.domain.SudokuValidator
 import com.example.sudokusolver.ui.theme.SudokuSolverTheme
 
 @Composable
@@ -35,6 +36,16 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
     var selectedCell by remember {
         mutableStateOf<Int?>(null)
     }
+    val conflicts = remember(board) {
+        SudokuValidator.findConflicts(board)
+    }
+
+    LaunchedEffect(board) {
+        Log.d("SudokuScreen", "Validation completed: conflicts=${conflicts.sorted()}")
+        if (conflicts.isNotEmpty()) {
+            Log.w("SudokuScreen", "Board contains ${conflicts.size} conflicting cells")
+        }
+    }
 
     LaunchedEffect(selectedCell) {
         Log.d("SudokuScreen", "Selected cell changed: index=$selectedCell")
@@ -48,6 +59,7 @@ fun SudokuScreen(modifier: Modifier = Modifier) {
         SudokuBoard(
             board = board,
             selectedCell = selectedCell,
+            conflicts = conflicts,
             onCellSelected = { index -> selectedCell = index }
         )
         NumberPad(
