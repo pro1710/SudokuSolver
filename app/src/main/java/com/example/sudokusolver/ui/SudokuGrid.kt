@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +35,6 @@ fun SudokuGrid(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
             .aspectRatio(1f)
             .background(MaterialTheme.colorScheme.surface)
     ) {
@@ -68,11 +66,13 @@ fun SudokuGrid(
         }
 
         Canvas(modifier = Modifier.matchParentSize()) {
+            if (size.minDimension <= 0f) return@Canvas
             val cellWidth = size.width / 9
             val cellHeight = size.height / 9
 
             for (line in 0..9) {
-                val strokeWidth = if (line % 3 == 0) 3.dp.toPx() else 1.dp.toPx()
+                val desiredStrokeWidth = if (line % 3 == 0) 3.dp.toPx() else 1.dp.toPx()
+                val strokeWidth = desiredStrokeWidth.coerceAtMost(size.minDimension)
                 // Keep the entire outer border inside the drawing area.
                 val x = (line * cellWidth).coerceIn(strokeWidth / 2, size.width - strokeWidth / 2)
                 val y = (line * cellHeight).coerceIn(strokeWidth / 2, size.height - strokeWidth / 2)
@@ -131,7 +131,7 @@ fun SudokuCell(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, widthDp = 360, heightDp = 360)
 @Composable
 fun SudokuGridPreview() {
     val originalBoard = SudokuBoard().withValue(0, 5).withValue(8, 5)

@@ -26,6 +26,7 @@ new tutorials and links are added as the course progresses.
 | [07B](steps/07b-domain-model.md) | Sudoku domain model | Encapsulation, constructor validation, coordinates, operator get, defensive copying, immutable updates | `step-07b: introduce sudoku domain model` |
 | [07C](steps/07c-domain-api-refactor.md) | Migrate app to domain model | Immutable public APIs, private working arrays, nullable results, model-based UI state | `step-07c: migrate app to sudoku domain model` |
 | [07D](steps/07d-cleanup-and-viewmodel-tests.md) | Package cleanup and ViewModel tests | Interfaces, constructor injection, logging adapter, test doubles, state-transition tests | `step-07d: clean architecture and test viewmodel` |
+| [08](steps/08-responsive-layout.md) | Portrait and landscape layouts | BoxWithConstraints, bounded sizing, aspectRatio, scrollable number pad, visible actions, size previews | `step-08: support portrait and landscape layouts` |
 
 The generated project baseline is commit `6089f5f` (`initial android project`).
 It is the starting point, not an educational implementation step. The table uses
